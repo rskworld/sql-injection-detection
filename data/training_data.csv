@@ -1,0 +1,135 @@
+query,label
+SELECT * FROM users WHERE id = 1,0
+SELECT name FROM users,0
+SELECT * FROM products WHERE price > 100,0
+SELECT * FROM users WHERE name = 'test',0
+SELECT COUNT(*) FROM orders,0
+SELECT * FROM users WHERE id = 1 AND password = 'test',0
+SELECT * FROM users WHERE id = 1 AND name = 'admin',0
+"INSERT INTO users (name, email) VALUES ('John', 'john@example.com')",0
+"INSERT INTO products (name, price) VALUES ('Laptop', 999.99)",0
+"INSERT INTO orders (user_id, total) VALUES (1, 100.00)",0
+UPDATE users SET name = 'John' WHERE id = 1,0
+UPDATE products SET price = 99.99 WHERE id = 5,0
+UPDATE orders SET status = 'completed' WHERE id = 10,0
+DELETE FROM users WHERE id = 1,0
+DELETE FROM products WHERE price < 10,0
+DELETE FROM orders WHERE status = 'cancelled',0
+SELECT * FROM products ORDER BY price DESC,0
+"SELECT u.name, o.total FROM users u JOIN orders o ON u.id = o.user_id",0
+SELECT * FROM users WHERE age BETWEEN 18 AND 65,0
+SELECT * FROM products WHERE category = 'electronics',0
+SELECT AVG(price) FROM products,0
+SELECT * FROM users WHERE email LIKE '%@gmail.com',0
+SELECT * FROM users WHERE created_at > '2024-01-01',0
+"SELECT name, email FROM users WHERE status = 'active'",0
+SELECT * FROM orders WHERE total > 100 AND status = 'completed',0
+SELECT DISTINCT category FROM products,0
+SELECT * FROM users ORDER BY name ASC,0
+SELECT MAX(price) FROM products,0
+SELECT MIN(price) FROM products,0
+SELECT SUM(total) FROM orders,0
+"SELECT * FROM users WHERE id IN (1, 2, 3)",0
+SELECT * FROM users WHERE name IS NOT NULL,0
+SELECT * FROM products WHERE price BETWEEN 10 AND 100,0
+SELECT * FROM users WHERE age >= 18,0
+SELECT * FROM users WHERE age <= 65,0
+SELECT * FROM users WHERE name <> 'admin',0
+SELECT * FROM users LIMIT 10,0
+SELECT * FROM users OFFSET 5,0
+SELECT * FROM users GROUP BY category,0
+"SELECT category, COUNT(*) FROM products GROUP BY category",0
+SELECT * FROM users HAVING COUNT(*) > 1,0
+SELECT * FROM users u LEFT JOIN orders o ON u.id = o.user_id,0
+SELECT * FROM users u RIGHT JOIN orders o ON u.id = o.user_id,0
+SELECT * FROM users u INNER JOIN orders o ON u.id = o.user_id,0
+SELECT * FROM users WHERE id = (SELECT MAX(id) FROM users),0
+SELECT * FROM users WHERE EXISTS (SELECT 1 FROM orders WHERE orders.user_id = users.id),0
+SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM banned_users),0
+"SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM users",0
+SELECT UPPER(name) FROM users,0
+SELECT LOWER(email) FROM users,0
+SELECT * FROM users WHERE LENGTH(name) > 5,0
+"SELECT * FROM users WHERE SUBSTRING(email, 1, 5) = 'admin'",0
+SELECT * FROM users WHERE CAST(age AS VARCHAR) = '25',0
+"SELECT * FROM users WHERE COALESCE(middle_name, '') = ''",0
+"SELECT * FROM users WHERE ISNULL(deleted_at, '') = ''",0
+SELECT * FROM users WHERE id = 1 OR 1=1,1
+SELECT * FROM users WHERE id = 1 AND 1=1,1
+SELECT * FROM users WHERE id = 1 OR '1'='1',1
+SELECT * FROM users WHERE id = 1 OR 'a'='a',1
+SELECT * FROM users WHERE id = 1' OR '1'='1,1
+SELECT * FROM users WHERE id = 1' OR '1'='1'--,1
+SELECT * FROM users WHERE id = 1' OR '1'='1'#,1
+SELECT * FROM users WHERE id = 1' OR '1'='1'/*,1
+SELECT * FROM users WHERE id = 1' OR '1'='1'/**/,1
+SELECT * FROM users WHERE name = 'admin'--,1
+SELECT * FROM users WHERE id = 1 OR 1=1--,1
+SELECT * FROM users WHERE id = 1' OR '1'='1'--,1
+SELECT * FROM users WHERE id = 1' OR '1'='1'#,1
+SELECT * FROM users WHERE id = 1' OR '1'='1'/*,1
+SELECT * FROM users WHERE id = 1' OR '1'='1'/**/,1
+SELECT * FROM users UNION SELECT * FROM passwords,1
+SELECT * FROM users WHERE id = 1 UNION SELECT NULL--,1
+SELECT * FROM users WHERE id = 1' UNION SELECT NULL--,1
+SELECT * FROM users UNION ALL SELECT * FROM admin,1
+"SELECT * FROM users UNION SELECT username, password FROM admin",1
+SELECT * FROM users WHERE id = 1; DROP TABLE users;--,1
+SELECT * FROM users WHERE id = 1; DELETE FROM users;--,1
+SELECT * FROM users WHERE id = 1; UPDATE users SET password='hacked';--,1
+"SELECT * FROM users WHERE id = 1; INSERT INTO admin VALUES ('hacker', 'pass');--",1
+SELECT * FROM users WHERE id = 1; WAITFOR DELAY '00:00:05'--,1
+SELECT * FROM users WHERE id = 1' AND SLEEP(5)--,1
+"SELECT * FROM users WHERE id = 1' AND BENCHMARK(1000000,MD5(1))--",1
+"SELECT * FROM users WHERE id = 1' AND IF(1=1,SLEEP(5),0)--",1
+SELECT * FROM users WHERE id = 1; EXEC xp_cmdshell('dir')--,1
+SELECT * FROM users WHERE id = 1; EXEC sp_executesql 'SELECT * FROM admin'--,1
+SELECT * FROM users WHERE id = 1' OR 1=1; EXEC xp_cmdshell('net user')--,1
+"SELECT * FROM users WHERE id = 1' AND ASCII(SUBSTRING((SELECT password FROM users WHERE id=1),1,1))>64--",1
+SELECT * FROM users WHERE id = 1' AND LENGTH((SELECT password FROM users WHERE id=1))>5--,1
+SELECT * FROM users WHERE id = 1' AND (SELECT COUNT(*) FROM users)>0--,1
+"SELECT * FROM users WHERE id = 1' AND EXTRACTVALUE(1, CONCAT(0x7e, (SELECT password FROM users LIMIT 1)))--",1
+"SELECT * FROM users WHERE id = 1' AND UPDATEXML(1, CONCAT(0x7e, (SELECT password FROM users LIMIT 1)), 1)--",1
+SELECT * FROM users WHERE id = 1' AND EXP(~(SELECT * FROM (SELECT password FROM users) x))--,1
+SELECT * FROM users WHERE id = 1' OR %271%27=%271,1
+SELECT * FROM users WHERE id = 1' OR 0x31=0x31--,1
+SELECT * FROM users WHERE id = CHAR(49) OR CHAR(49)=CHAR(49)--,1
+SELECT * FROM users WHERE id = 1' OR CHAR(49)=CHAR(49)--,1
+SELECT * FROM users WHERE name = (SELECT name FROM temp WHERE id=1' OR '1'='1),1
+SELECT * FROM users WHERE email = (SELECT email FROM users WHERE id=1' OR '1'='1),1
+SELECT * FROM users WHERE id = 1; SELECT * FROM passwords;--,1
+SELECT * FROM users WHERE id = 1; CREATE TABLE hacked (data VARCHAR(255));--,1
+"SELECT * FROM users ORDER BY id, (SELECT * FROM (SELECT COUNT(*),CONCAT(database(),FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)a)--",1
+"SELECT * FROM users GROUP BY id, (SELECT * FROM (SELECT COUNT(*),CONCAT(database(),FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)a)--",1
+SELECT * FROM users WHERE id = 1' OR '1'='1'%00,1
+SELECT * FROM users WHERE id = 0x31 OR 0x31=0x31,1
+SELECT * FROM users WHERE id = 1' OR %2527%253D%2527,1
+"SELECT * FROM users WHERE id = 1' OR '1'='1' UNION SELECT NULL, NULL, NULL--",1
+"SELECT * FROM users WHERE id = 1' OR '1'='1' UNION SELECT username, password, NULL FROM admin--",1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'x'='x,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'a'='a,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'b'='b,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'c'='c,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'd'='d,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'e'='e,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'f'='f,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'g'='g,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'h'='h,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'i'='i,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'j'='j,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'k'='k,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'l'='l,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'm'='m,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'n'='n,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'o'='o,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'p'='p,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'q'='q,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'r'='r,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 's'='s,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 't'='t,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'u'='u,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'v'='v,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'w'='w,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'x'='x,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'y'='y,1
+SELECT * FROM users WHERE id = 1' OR '1'='1' OR 'z'='z,1
